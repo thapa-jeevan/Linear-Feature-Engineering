@@ -76,3 +76,7 @@ def model_predict(Xtest, w_ls, basis):
     ytest_preds = Ztest @ w_ls
     return ytest_preds
 
+
+def mse(y_true, y_pred):
+    """ (float) Computes MSE loss between true and prediction values """
+    return ((y_true - y_pred) ** 2).mean()
