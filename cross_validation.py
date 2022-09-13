@@ -4,6 +4,19 @@ from utils import model_fit
 
 
 def cross_validation(Z, y, K):
+    """ Applies cross validation to the data
+
+    This module applies K-fold cross validation on the input data to avoid over-fitting on the data.
+    It includes a parameter `K`, which is the number of folds to experiment on.
+
+    Args:
+        Z (np.ndarray): Feature engineered data of shape (N, D).
+        y (np.ndarray): Regression labels array of shape (N, 1) .
+        K (int): Number of folds to run cross validation on.
+
+    Returns:
+        float: mean MSE error for cross validation.
+    """
     chunk_length = len(Z) // K
 
     R_cross_eval = 0

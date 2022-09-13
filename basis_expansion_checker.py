@@ -7,6 +7,16 @@ from cross_validation import cross_validation
 
 
 def basis_expansion_chooser(X, y):
+    """ Chooses basis on the based of cross validation error
+
+    Args:
+        X (np.ndarray): Input training data of shape (N, D).
+        y (np.ndarray): Training data labels of shape (N, 1).
+
+    Returns:
+        tuple: Basis with the least cross validation MSE loss with values
+        (poly_degree, include_sin, include_log).
+    """
     least_R = np.inf
     basis = 0
 
