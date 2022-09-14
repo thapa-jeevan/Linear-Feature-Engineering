@@ -37,3 +37,17 @@ def basis_expansion_chooser(X, y):
         print(_basis, "MSE: ", mean_R)
     print(f"Minimal MSE basis: {basis} Least MSE Loss: {least_R}")
     return basis
+
+
+def get_expanded_data(X, comb):
+    include_sin_ls = [comb[1]]
+    include_log_ls = [comb[0]]
+    poly_deg_ls = range(comb[2], comb[2] + 1)
+
+    Z = None
+
+    for _basis in itertools.product(include_log_ls, include_sin_ls, poly_deg_ls):  # only has polynomial expansion
+        Z = expand_basis(X, *_basis[::-1])
+        print(type(Z), Z.shape)
+
+    return Z
