@@ -1,6 +1,6 @@
 import numpy as np
 
-from sklearn.preprocessing import PolynomialFeatures
+# from sklearn.preprocessing import PolynomialFeatures
 
 
 def expand_basis(X, poly_deg, include_sin, include_log):
@@ -18,7 +18,7 @@ def expand_basis(X, poly_deg, include_sin, include_log):
     # poly_expansion = PolynomialFeatures(degree=poly_deg)
     # Z_ls = [poly_expansion.fit_transform(X)]
 
-    Z_ls = [expand_poly(X, p)]
+    Z_ls = [expand_poly(X, poly_deg)]
 
     if include_sin:
         Z_ls.append(np.sin(3 * X))

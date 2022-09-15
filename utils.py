@@ -1,5 +1,7 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 
 from expand_basis import expand_basis
 
@@ -16,14 +18,14 @@ def read_data():
         np.ndarray: Input test data of shape (N', D).
 
     """
-    df_train = pd.read_csv("traindata.txt", sep="   ", names=range(9), engine="python")
+    df_train = pd.read_csv("data/traindata.txt", sep="   ", names=range(9), engine="python")
 
     df_train = df_train.sample(len(df_train))
 
     X_train = df_train.iloc[:, :-1].values
     y_train = df_train.iloc[:, -1].values.reshape(-1, 1)
 
-    X_test = pd.read_csv("testinputs.txt", sep="   ", names=range(8), engine="python").values
+    X_test = pd.read_csv("data/testinputs.txt", sep="   ", names=range(8), engine="python").values
     return X_train, y_train, X_test
 
 
@@ -80,3 +82,52 @@ def model_predict(Xtest, w_ls, basis):
 def mse(y_true, y_pred):
     """ (float) Computes MSE loss between true and prediction values """
     return ((y_true.ravel() - y_pred.ravel()) ** 2).mean()
+
+
+def save_predictions(ytest_preds):
+    """ Saves results predicted by the model in csv format """
+    np.savetxt("reports/prediction_results.csv", ytest_preds)
+
+
+def visualize_cross_validation_mses(cv_results):
+    """ Generates subplots with mse and its log form across different conditions"""
+
+    df_results = pd.DataFrame(cv_results,
+                              columns=["include log basis", "include sin basis",
+                                       "polynomial basis degree", "MSE"])
+    df_results["log10 MSE"] = np.log10(df_results["MSE"])
+    df_results["sin and log basis"] = df_results.apply(
+        lambda x: f"log: {x['include log basis']}, sin: {x['include sin basis']}", axis=1)
+
+    fig, (ax1, ax2) = plt.subplots(
+        figsize=(12, 4),
+        ncols=2
+    )
+
+    sns.lineplot(
+        df_results[df_results["polynomial basis degree"] < 8],
+        x="polynomial basis degree",
+        y="MSE",
+        hue="sin and log basis",
+        marker="o",
+        errorbar=('ci', 95),
+        err_style='band',
+        ax=ax1
+    )
+    ax1.set_title("MSE v/s polynomial degree")
+
+    sns.lineplot(
+        df_results[df_results["polynomial basis degree"] < 8],
+        x="polynomial basis degree",
+        y="MSE",
+        hue="sin and log basis",
+        marker="o",
+        err_style='band',
+        errorbar=('ci', 95),
+        ax=ax2
+    )
+    ax2.set(yscale="log")
+    ax2.set_title("MSE v/s polynomial degree in log scale")
+
+    # plt.show()
+    plt.savefig("reports/training_results.jpg")
