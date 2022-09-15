@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 from expand_basis import expand_basis
-
+from sklearn.preprocessing import MinMaxScaler
 
 def read_data():
     """ Reads the data for training and test
@@ -80,3 +80,13 @@ def model_predict(Xtest, w_ls, basis):
 def mse(y_true, y_pred):
     """ (float) Computes MSE loss between true and prediction values """
     return ((y_true - y_pred) ** 2).mean()
+
+
+def normalize_data(Xtrain, ytrain, Xtest):
+    scaler = MinMaxScaler()
+    scaler.fit(Xtrain)
+    Xtrain = scaler.transform(Xtrain)
+    # ytrain = scaler.transform(ytrain)
+    Xtest = scaler.transform(Xtest)
+
+    return Xtrain, ytrain, Xtest

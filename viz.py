@@ -74,6 +74,7 @@ def pca_3d(x_train, y_train):
     ax.set_zlabel('y')
     plt.savefig('data_viz/pca_3d.png')
 
+
 def data_distribution(x_train, y_train):
     sub_shape = (3, 3)
 
@@ -101,18 +102,65 @@ def data_distribution(x_train, y_train):
     plt.savefig('data_viz/data_dist.png')
 
 
+def pca_test_data(x_train, x_test, y_train):
+    pca = PCA(n_components=2, svd_solver='full')
+    pca.fit(x_train)
+    new_x_train = pca.transform(x_train)
+    new_x_test = pca.transform(x_test)
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.scatter(new_x_train[:, 0], new_x_train[:, 1], facecolors='none', edgecolors='green', label='Train',)
+    # ax.scatter(new_x_train[:, 0], new_x_train[:, 1], c=range(len(y_train)), ec='k', label='Train')
+    ax.scatter(new_x_test[:, 0], new_x_test[:, 1],
+               facecolors='red',
+               # edgecolors='red',
+               label='Test',
+               marker="x")
+    ax.set_xlabel('x1')
+    ax.set_ylabel('x2')
+    ax.legend()
+    plt.savefig('data_viz/pca_test_data.png')
+
+
+
+def pca_color_map(x_train, x_test, y_train):
+    pca = PCA(n_components=2, svd_solver='full')
+    pca.fit(x_train)
+    new_x_train = pca.transform(x_train)
+    new_x_test = pca.transform(x_test)
+
+    fig, ax = plt.subplots(figsize=(6, 5))
+    ax.scatter(new_x_train[:, 0], new_x_train[:, 1], c=range(len(y_train)),
+               ec='k',
+               cmap='Greens',
+               label='Train')
+    # ax.scatter(new_x_test[:, 0], new_x_test[:, 1], c=range(len(new_x_test[:, 1])),
+    #            ec='k',
+    #            cmap='Reds',
+    #            label='Test')
+    ax.set_title('After Shuffle')
+    ax.set_xlabel('x1')
+    ax.set_ylabel('x2')
+    ax.legend()
+    plt.savefig('data_viz/pca_color_map_after.png')
+
+
 if __name__ == '__main__':
     df_train = pd.read_csv("traindata.txt", sep="   ", names=range(9), engine="python")
     df_train = df_train.sample(len(df_train))
 
-    x_train = df_train.iloc[:, :-1].values
-    y_train = df_train.iloc[:, -1].values.reshape(-1, 1)
+    x = df_train.iloc[:, :-1].values
+    y = df_train.iloc[:, -1].values.reshape(-1, 1)
 
-    each_x_vs_y(x_train, y_train)
-    pca_x_vs_y(x_train, y_train)
-    pca_3d(x_train, y_train)
-    # get_cov(x_train, y_train)
-    data_distribution(x_train, y_train)
+    X_test = pd.read_csv("testinputs.txt", sep="   ", names=range(8), engine="python").values
+
+    each_x_vs_y(x, y)
+    pca_x_vs_y(x, y)
+    pca_3d(x, y)
+    # get_cov(x, y_train)
+    data_distribution(x, y)
+    pca_test_data(x, X_test, y)
+    pca_color_map(x, X_test, y)
 
 
 
