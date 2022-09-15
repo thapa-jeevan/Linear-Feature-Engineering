@@ -4,6 +4,7 @@ import numpy as np
 
 from basis_expansion_checker import basis_expansion_chooser
 from utils import all_train_fit, model_predict, mse, read_data, save_predictions
+from data_analysis import data_analysis
 
 
 def args_parse():
@@ -51,5 +52,5 @@ if __name__ == '__main__':
     elif args.mode == "test":
         predict()
 
-    # if args.data_analysis:
-    #     data_analysis()
+    if args.data_analysis:
+        data_analysis()
