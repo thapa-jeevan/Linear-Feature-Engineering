@@ -12,7 +12,7 @@ pip install -r requirements.txt
 ```
 
 
-2. To generate the test predictions, using the obtained best model, run the following command. It will write a file named `prediction_results.csv` inside `reports/` directory. 
+2. The predictions made by our best least squares model are already dumped to `reports/prediction_results.csv` file. In order to regenerate the test predictions, using the obtained best model, run the following command. It will write the results to the file. 
 
 ```bash
 python main.py --mode test

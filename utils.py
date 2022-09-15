@@ -87,6 +87,7 @@ def mse(y_true, y_pred):
 def save_predictions(ytest_preds):
     """ Saves results predicted by the model in csv format """
     np.savetxt("reports/prediction_results.csv", ytest_preds)
+    print("Test data predictions written to `reports/prediction_results.csv` file.")
 
 
 def visualize_cross_validation_mses(cv_results):
