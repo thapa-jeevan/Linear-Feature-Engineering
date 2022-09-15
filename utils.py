@@ -93,8 +93,8 @@ def visualize_cross_validation_mses(cv_results):
     """ Generates subplots with mse and its log form across different conditions"""
 
     df_results = pd.DataFrame(cv_results,
-                              columns=["include log basis", "include sin basis",
-                                       "polynomial basis degree", "MSE"])
+                              columns=["polynomial basis degree",  "include sin basis",
+                                       "include log basis", "MSE"])
     df_results["log10 MSE"] = np.log10(df_results["MSE"])
     df_results["sin and log basis"] = df_results.apply(
         lambda x: f"log: {x['include log basis']}, sin: {x['include sin basis']}", axis=1)
