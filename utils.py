@@ -90,3 +90,13 @@ def normalize_data(Xtrain, ytrain, Xtest):
     Xtest = scaler.transform(Xtest)
 
     return Xtrain, ytrain, Xtest
+
+
+def remove_feature(Xtrain, Xtest):
+    Xtrain = np.array([Xtrain[:, 0], Xtrain[:, 3], Xtrain[:, 5], Xtrain[:, 6]]).T
+    Xtest = np.array([Xtest[:, 0], Xtest[:, 3], Xtest[:, 5], Xtest[:, 6]]).T
+
+    print(Xtrain.shape)
+    print(Xtest.shape)
+
+    return Xtrain, Xtest
