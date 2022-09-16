@@ -1,6 +1,6 @@
 import numpy as np
 
-from sklearn.preprocessing import PolynomialFeatures
+# from sklearn.preprocessing import PolynomialFeatures
 
 
 def expand_basis(X, poly_deg, include_sin, include_log):
@@ -15,10 +15,10 @@ def expand_basis(X, poly_deg, include_sin, include_log):
     Returns:
         np.ndarray: Expanded feature vector of shape (N, D').
     """
-    # Z = expand_poly(X, p)
-    poly_expansion = PolynomialFeatures(degree=poly_deg)
+    # poly_expansion = PolynomialFeatures(degree=poly_deg)
+    # Z_ls = [poly_expansion.fit_transform(X)]
 
-    Z_ls = [poly_expansion.fit_transform(X)]
+    Z_ls = [expand_poly(X, poly_deg)]
 
     if include_sin:
         Z_ls.append(np.sin(3 * X))
@@ -41,10 +41,6 @@ def expand_poly(X, p):
         (np.ndarray): Expanded polynomial features.
     """
     N, dim = X.shape
-    Z_ = np.zeros((N, (p + 1) * dim))
-
-    for i in range(p + 1):
-        Z_[:, i * dim: (i + 1) * dim] = X ** (i + 1)
-
-    Z = np.hstack([np.ones((N, 1)), Z_])
+    Z = np.hstack([np.ones((N, 1)), *[X ** i for i in range(1, p + 1)]])
     return Z
+

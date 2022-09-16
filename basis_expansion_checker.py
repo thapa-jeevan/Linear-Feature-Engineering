@@ -4,6 +4,7 @@ import numpy as np
 
 from expand_basis import expand_basis
 from cross_validation import cross_validation
+from utils import visualize_cross_validation_mses
 
 
 def basis_expansion_chooser(X, y):
@@ -22,20 +23,23 @@ def basis_expansion_chooser(X, y):
 
     K = 5
 
-    poly_deg_ls = range(1, 5)
+    cv_results = []
+
+    poly_deg_ls = range(1, 8)
     include_sin_ls = [True, False]
     include_log_ls = [True, False]
 
-    for _basis in itertools.product(include_log_ls, include_sin_ls, poly_deg_ls):  # only has polynomial expansion
-        Z = expand_basis(X, *_basis[::-1])
+    for _basis in itertools.product(poly_deg_ls, include_sin_ls, include_log_ls):
+        Z = expand_basis(X, *_basis)
         mean_R = cross_validation(Z, y, K)
 
         if mean_R < least_R:
             least_R = mean_R
             basis = _basis
 
-        print(_basis, "MSE: ", mean_R)
+        cv_results.append([*_basis, mean_R])
     print(f"Minimal MSE basis: {basis} Least MSE Loss: {least_R}")
+    visualize_cross_validation_mses(cv_results)
     return basis
 
 

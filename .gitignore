@@ -1,6 +1,11 @@
 .idea/
 .ipynb_checkpoints/
 __pycache__
+<<<<<<< HEAD
 
 venv/
 /test.png
+=======
+*.ipynb
+.DS_Store
+>>>>>>> refactor
