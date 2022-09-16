@@ -26,5 +26,5 @@ python main.py --mode train
 
 4. To visualize the analysis done on the data, run the following command. The visualization results are dumped inside `data_viz` directory.
 ```bash
-python main.py --data-analysis
+python main.py --data-analysis True
 ```
