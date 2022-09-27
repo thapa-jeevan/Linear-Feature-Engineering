@@ -1,16 +1,13 @@
 import math
-import tensorflow as tf
-import itertools
 
-import numpy as np
 import pandas as pd
 
-from sklearn.preprocessing import PolynomialFeatures
 from sklearn.model_selection import KFold
 from sklearn.metrics import mean_squared_error as mse
 from sklearn.preprocessing import StandardScaler
-from tensorflow.keras import callbacks, models, layers, losses, optimizers
+from tensorflow.keras import callbacks, losses, optimizers
 
+from mlp import get_model
 
 df_train = pd.read_csv("traindata.txt", sep="   ", names=range(9), engine="python")
 df_train = df_train.sample(len(df_train))
@@ -23,26 +20,6 @@ K = 5
 cv = KFold(K)
 
 
-class ResBlock(layers.Layer):
-    def __init__(self, num_hidden):
-        super(ResBlock, self).__init__()
-        self.l1 = layers.Dense(num_hidden, activation='relu')
-        self.bn1 = layers.BatchNormalization()
-        self.l2 = layers.Dense(num_hidden)
-        self.relu = layers.ReLU()
-        self.add = layers.Add()
-        self.bn2 = layers.BatchNormalization()
-
-    def call(self, x):
-        fx = self.l1(x)
-        fx = self.bn1(fx)
-        fx = self.l2(fx)
-        out = self.add([x, fx])
-        out = self.relu(out)
-        out = self.bn2(out)
-        return out
-
-
 sum_cv_test_loss = 0
 
 for train_idx, test_idx in cv.split(df_train):
@@ -52,20 +29,7 @@ for train_idx, test_idx in cv.split(df_train):
     X_train, y_train = d_train[:, :-1], d_train[:, -1]
     X_test, y_test = d_test[:, :-1], d_test[:, -1]
 
-    model = models.Sequential([
-        layers.Dense(256, activation="relu"),
-        ResBlock(256),
-        ResBlock(256),
-        ResBlock(256),
-        ResBlock(256),
-        ResBlock(256),
-        ResBlock(256),
-        # ResBlock(256),
-        # ResBlock(256),
-        # ResBlock(256),
-        layers.Dense(1),
-    ])
-
+    model = get_model()
     initial_learning_rate = 0.003
 
 
